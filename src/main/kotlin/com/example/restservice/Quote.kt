@@ -5,15 +5,15 @@ class Quote(i: String, b: String, a: String) {
     private val bid: String = b
     private val ask: String = a
 
-    fun getIsin(): String? {
+    fun getIsin(): String {
         return isin
     }
 
-    fun getBid(): String? {
+    fun getBid(): String {
         return bid
     }
 
-    fun getAsk(): String? {
+    fun getAsk(): String {
         return ask
     }
 

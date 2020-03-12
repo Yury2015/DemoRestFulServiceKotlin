@@ -6,19 +6,19 @@ import kotlin.Float as Float1
 
 class Elvl {
     companion object {
-        private var history: MutableMap<Long, Quote> = HashMap()
-        private val elvl: MutableMap<String, Float1> = HashMap()
+        private val historyMap: MutableMap<Long, Quote> = HashMap()
+        private val elvlMap: MutableMap<String, Float1> = HashMap()
 
         private fun calculateElvl(quote: Quote): Float1 {
-            var isin: String?
-            var elvl: Float1?
+            val isin: String
+            val elvl: Float1?
             val bid: Float1
             val ask: Float1
             try {
                 isin = quote.getIsin()
-                elvl = this.elvl[isin]
-                bid = java.lang.Float.valueOf(quote.getBid())
-                ask = java.lang.Float.valueOf(quote.getAsk())
+                elvl = elvlMap[isin]
+                bid = Float.valueOf(quote.getBid())
+                ask = Float.valueOf(quote.getAsk())
                 if (elvl != null) {
                     if (bid > elvl) {
                         return bid
@@ -31,8 +31,8 @@ class Elvl {
                 }
                 return elvl
             } catch (e: NumberFormatException) {
-                if (quote.getBid()!!.isEmpty()) {
-                    return java.lang.Float.valueOf(quote.getAsk())
+                if (quote.getBid().isEmpty()) {
+                    return Float.valueOf(quote.getAsk())
                 }
                 e.printStackTrace()
             }
@@ -40,40 +40,30 @@ class Elvl {
         }
 
         fun save(id: Long, quote: Quote) {
-            history[id] = quote
-            elvl[quote.getIsin().toString()] = calculateElvl(quote)
+            historyMap[id] = quote
+            elvlMap[quote.getIsin()] = calculateElvl(quote)
         }
 
         fun getElvlAll(): List<Map.Entry<String?, Float1?>>? {
-            return elvl.entries.stream().collect(Collectors.toList())
+            return elvlMap.entries.stream().collect(Collectors.toList())
         }
 
         fun getElvl(isin: String?): Float1? {
-            return elvl.get(isin)
+            return elvlMap[isin]
         }
-
-
     }
 
-    fun getHistory(): Map<Long, Quote>? {
-        return history
+    fun getHistory(): Map<Long, Quote> {
+        return historyMap
     }
 
-    fun getElvl(): Map<String, Float1>? {
-        return elvl
-    }
-
-    fun getElvl(isin: String?): Float1? {
-        return elvl.get(isin)
+    fun getElvl(): Map<String, Float1> {
+        return elvlMap
     }
 
     fun save(id: Long, quote: Quote) {
-        history[id] = quote
-        elvl[quote.getIsin().toString()] = calculateElvl(quote)
-    }
-
-    private operator fun Float1?.get(isin: String?): Float1? {
-        return elvl[isin]
+        historyMap[id] = quote
+        elvlMap[quote.getIsin()] = calculateElvl(quote)
     }
 }
 
