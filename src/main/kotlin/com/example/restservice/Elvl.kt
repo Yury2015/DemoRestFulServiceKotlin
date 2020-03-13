@@ -5,13 +5,14 @@ import java.util.stream.Collectors
 import kotlin.Float as Float1
 
 class Elvl {
+
     companion object {
         private val historyMap: MutableMap<Long, Quote> = HashMap()
         private val elvlMap: MutableMap<String, Float1> = HashMap()
 
         private fun calculateElvl(quote: Quote): Float1 {
+            var elvl: Float1? = null
             val isin: String
-            val elvl: Float1?
             val bid: Float1
             val ask: Float1
             try {
@@ -29,14 +30,13 @@ class Elvl {
                 } else {
                     return bid
                 }
-                return elvl
             } catch (e: NumberFormatException) {
                 if (quote.getBid().isEmpty()) {
                     return Float.valueOf(quote.getAsk())
                 }
                 e.printStackTrace()
             }
-            throw NullPointerException()
+            return elvl!!.toFloat()
         }
 
         fun save(id: Long, quote: Quote) {
